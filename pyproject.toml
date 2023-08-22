@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "automatedgreythr"
+version = "0.1.0"
+description = "This aplication automates the process of GreytHR sign-in and sign-out"
+authors = ["Pratik Ghodke <pratikghodke41@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^2.3.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
