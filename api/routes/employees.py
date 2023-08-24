@@ -7,6 +7,7 @@ from flask_pydantic import validate
 from api.schema.validation import EmployeesPostRequest
 from api.routes.helper import create_blueprint, create_restful_api
 from api.service.employee import register_employee, delete_employee
+from api.service.greythr_automation import execute_sign_operation
 
 
 class EmployeesAPI(Resource):
@@ -36,9 +37,22 @@ class EmployeeAPI(Resource):
         return "", 204
 
 
+class PunchAPI(Resource):
+    """API to sign-in/sign-off."""
+
+    def get(self, eid: str):
+        """Auto sign-in/sign-off."""
+
+        print(f"Received request to Auto Sign in {eid=} GreytHR.")
+        execute_sign_operation(eid.lower())
+        print(f"Auto Signed for {eid=}!")
+        return "SUCCESS", 201
+
+
 employees_blueprint = create_blueprint("employee", __name__)
 employees_api = create_restful_api(employees_blueprint)
 
 # Register routes
 employees_api.add_resource(EmployeesAPI, "/employee")
 employees_api.add_resource(EmployeeAPI, "/employee/<eid>")
+employees_api.add_resource(PunchAPI, "/employee/punch/<eid>")

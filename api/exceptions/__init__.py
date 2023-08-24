@@ -17,3 +17,12 @@ class EmployeeDoesNotExists(Exception):
         self.status_code = 404
         self.message = "YOU! Does not exist yet!"
         super().__init__(self.message)
+
+
+class AutoSignFailedError(Exception):
+    """Auto Sign operation failed exception"""
+
+    def __init__(self, error: str = "") -> None:
+        self.status_code = 422
+        self.message = f"Process Failed! {error}"
+        super().__init__(self.message)
