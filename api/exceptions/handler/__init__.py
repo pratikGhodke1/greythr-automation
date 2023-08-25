@@ -1,7 +1,11 @@
 """Error Handler Service"""
 
 from flask import Flask
-from api.exceptions import EmployeeAlreadyExists, EmployeeDoesNotExists
+from api.exceptions import (
+    EmployeeAlreadyExists,
+    EmployeeDoesNotExists,
+    AutoSignFailedError,
+)
 
 
 def _error_response(error: Exception) -> tuple[dict, int]:
@@ -33,7 +37,6 @@ def _error_response(error: Exception) -> tuple[dict, int]:
 
 def register_error_handlers(app: Flask):
     """register error handlers to flask application"""
-    print("REGISTERING")
     app.register_error_handler(EmployeeAlreadyExists, _error_response)
     app.register_error_handler(EmployeeDoesNotExists, _error_response)
-    print("REGISTERED")
+    app.register_error_handler(AutoSignFailedError, _error_response)

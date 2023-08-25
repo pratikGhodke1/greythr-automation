@@ -6,7 +6,7 @@ from api.exceptions import EmployeeAlreadyExists, EmployeeDoesNotExists
 from api.model import db
 from api.model.employee import Employee
 
-fernet = Fernet(Fernet.generate_key())
+fernet = Fernet(b'4VnnKxIio0WQnBkIgL8t0FJolYfwb-zl6_8GrqUaNhA=')
 
 
 def encrypt(text: str) -> bytes:

@@ -17,6 +17,8 @@ gunicorn = "^21.2.0"
 cryptography = "^41.0.3"
 selenium = "4.8.0"
 webdriver-manager = "^4.0.0"
+flask-apscheduler = "^1.12.4"
+pycrypto = "^2.6.1"
 
 
 [build-system]

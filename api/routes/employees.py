@@ -3,6 +3,7 @@
 from flask import make_response
 from flask_restful import Resource
 from flask_pydantic import validate
+from api.exceptions import AutoSignFailedError
 
 from api.schema.validation import EmployeesPostRequest
 from api.routes.helper import create_blueprint, create_restful_api
@@ -44,7 +45,12 @@ class PunchAPI(Resource):
         """Auto sign-in/sign-off."""
 
         print(f"Received request to Auto Sign in {eid=} GreytHR.")
-        execute_sign_operation(eid.lower())
+
+        try:
+            execute_sign_operation(eid.lower())
+        except Exception as err:
+            raise AutoSignFailedError(str(err)) from err
+
         print(f"Auto Signed for {eid=}!")
         return "SUCCESS", 201
 
