@@ -1,11 +1,10 @@
 """Script to automate sign-in and sign-out functionality."""
 
+from os import path
 from time import sleep
 from flask import current_app
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from api.exceptions import EmployeeDoesNotExists
 
 # from api.model import db
@@ -28,7 +27,7 @@ def init_chrome_web_driver():
     options.add_argument(f"user-agent={USER_AGENT}")
     options.headless = True
     return webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()), options=options
+        executable_path=path.abspath("/usr/bin/chromedriver"), options=options
     )
 
 
