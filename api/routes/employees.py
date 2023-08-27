@@ -16,7 +16,7 @@ class EmployeesAPI(Resource):
 
     def get(self):
         """Simple test endpoint for development. Will be removed later."""
-        return "Hello World!"
+        return "Hello World! Send your 'name', 'eid' and 'password' to me. I will handle it all."
 
     @validate()
     def post(self, body: EmployeesPostRequest):
@@ -24,7 +24,10 @@ class EmployeesAPI(Resource):
         print("Received request to create a new employee")
         register_employee(body.model_dump())
         print("Employee added!")
-        return make_response({"message": "All Set! ;)"}, 201)
+        return make_response(
+            {"message": "All Set! ;) Do not disclose existence of this application."},
+            201,
+        )
 
 
 class EmployeeAPI(Resource):
