@@ -6,18 +6,23 @@ from flask_restful import Api
 from config import Settings
 
 
-def create_blueprint(blueprint_name: str, import_name: str) -> Blueprint:
+def create_blueprint(
+    blueprint_name: str, import_name: str, no_prefix: bool = False
+) -> Blueprint:
     """Create a blueprint for a route.
 
     Args:
         name (str): Blueprint Name
         import_name (str): Routes file name
+        no_prefix (bool): Add API prefix or not?
 
     Returns:
         Blueprint: Flask blueprint for the route
     """
     return Blueprint(
-        name=blueprint_name, import_name=import_name, url_prefix=Settings().URL_PREFIX
+        name=blueprint_name,
+        import_name=import_name,
+        url_prefix=None if no_prefix else Settings().URL_PREFIX,
     )
 
 

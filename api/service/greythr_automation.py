@@ -26,6 +26,7 @@ def init_chrome_web_driver():
     """Create a new instance of Chrome driver for scrapping."""
     options = webdriver.ChromeOptions()
     options.add_argument(f"user-agent={USER_AGENT}")
+    options.headless = True
     return webdriver.Chrome(
         service=Service(ChromeDriverManager().install()), options=options
     )
