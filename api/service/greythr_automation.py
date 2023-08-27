@@ -7,7 +7,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from api.exceptions import EmployeeDoesNotExists
 
-# from api.model import db
 from api.model.employee import Employee
 from api.service.employee import decrypt
 
@@ -80,17 +79,3 @@ def execute_sign_operation(
     print("Exiting...")
     driver.quit()
 
-
-def auto_sign_employees():
-    """Auto Sign All Employees"""
-    print("INSIDE FUNCTION")
-    print(current_app)
-    employees = Employee.query.all()
-
-    for employee in employees:
-        try:
-            execute_sign_operation(employee=employee)
-        except Exception as err:
-            print(f"Error while signing {employee}")
-            print(f"[ERROR] {str(err)}")
-    print("DONE EXECUTING")
