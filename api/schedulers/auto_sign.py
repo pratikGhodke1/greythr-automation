@@ -1,6 +1,7 @@
 """Auto Sign Schedular."""
 
-from datetime import datetime
+from datetime import datetime, timedelta
+from pprint import pprint
 from random import shuffle
 from time import sleep
 from flask_apscheduler import APScheduler
@@ -20,14 +21,26 @@ def auto_sign_employees(app, action: str):
         employees = Employee.query.all()
         shuffle(employees)
         sleep_times = get_sign_action_schedule(len(employees))
-
+        pprint(
+            [
+                f"{emp.name}: {datetime.now()+timedelta(minutes=sleep_time)}"
+                for emp, sleep_time in zip(employees, sleep_times)
+            ]
+        )
         for employee, sleep_time in zip(employees, sleep_times):
+            retry = 3
             sleep(sleep_time * 60)
             logger.info(f"Signing {employee.name} at {datetime.now()}")
-            try:
-                execute_sign_operation(employee=employee, action=action)
-            except Exception:
-                logger.exception(f"Error while signing {employee}")
+
+            while retry:
+                try:
+                    execute_sign_operation(employee=employee, action=action)
+                    break
+                except Exception:
+                    retry -= 1
+                    logger.exception(
+                        f"Error while signing {employee}, Retries Remaining: {retry}"
+                    )
 
 
 def setup_schedulers(app, scheduler: APScheduler):
@@ -39,8 +52,7 @@ def setup_schedulers(app, scheduler: APScheduler):
             args=[app, "SignIn"],
             trigger="cron",
             day_of_week="mon-fri",
-            hour=13,
-            minute=28,
+            hour=9,
         )
         scheduler.add_job(
             id="auto_sign_out_employees",

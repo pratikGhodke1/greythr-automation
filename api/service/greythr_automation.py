@@ -77,7 +77,7 @@ def execute_sign_operation(
     )
 
     logger.debug(
-        f"[{employee.eid}] Current SignIn Status: {sign_action_button.text} | Action: {action}"
+        f"[{employee.eid}] Current SignIn Status: '{sign_action_button.text}' | Action: '{action}'"
     )
 
     if not action or SIGN_OPTIONS[action] == sign_action_button.text:
