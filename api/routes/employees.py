@@ -1,15 +1,17 @@
 """User routes."""
 
-from flask import make_response
+from flask import make_response, request
 from flask_restful import Resource
 from flask_pydantic import validate
-from api.exceptions import AutoSignFailedError
 
+from api.exceptions import AutoSignFailedError
+from api.modules.logger import init_logger
 from api.schema.validation import EmployeesPostRequest
 from api.routes.helper import create_blueprint, create_restful_api
 from api.service.employee import register_employee, delete_employee
 from api.service.greythr_automation import execute_sign_operation
 
+logger = init_logger(__name__, "EMPLOYEE_SERVICE", request)
 
 class EmployeesAPI(Resource):
     """API to handle users related operations."""
@@ -21,9 +23,9 @@ class EmployeesAPI(Resource):
     @validate()
     def post(self, body: EmployeesPostRequest):
         """Register an employee"""
-        print("Received request to create a new employee")
+        logger.info("Received request to create a new employee")
         register_employee(body.model_dump())
-        print("Employee added!")
+        logger.info("Employee added!")
         return make_response(
             {"message": "All Set! ;) Do not disclose existence of this application."},
             201,
@@ -35,9 +37,9 @@ class EmployeeAPI(Resource):
 
     def delete(self, eid: str):
         """Delete an employee entry."""
-        print("Received request to delete employee entry")
+        logger.info(f"Received request to delete employee {eid=} entry")
         delete_employee(eid.lower())
-        print("Employee record deleted!")
+        logger.info("Employee record deleted!")
         return "", 204
 
 
@@ -47,14 +49,15 @@ class PunchAPI(Resource):
     def get(self, eid: str):
         """Auto sign-in/sign-off."""
 
-        print(f"Received request to Auto Sign in {eid=} GreytHR.")
+        logger.info(f"Received request to Auto Sign in {eid=} GreytHR.")
 
         try:
             execute_sign_operation(eid.lower())
         except Exception as err:
+            logger.exception(str(err))
             raise AutoSignFailedError(str(err)) from err
 
-        print(f"Auto Signed for {eid=}!")
+        logger.info(f"Auto Signed for {eid=}!")
         return "SUCCESS", 201
 
 

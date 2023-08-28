@@ -2,14 +2,15 @@
 
 from os import path
 from time import sleep
-from flask import current_app
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from api.exceptions import EmployeeDoesNotExists
 
+from api.exceptions import EmployeeDoesNotExists
 from api.model.employee import Employee
+from api.modules.logger import init_logger
 from api.service.employee import decrypt
 
+logger = init_logger(__name__, "GREYTHR_AUTOMATION_HELPER")
 
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.62"  # pylint: disable=C0301
 URL = "https://sarvaha.greythr.com/home.do"
@@ -57,9 +58,11 @@ def execute_sign_operation(
             raise EmployeeDoesNotExists()
 
     driver = init_chrome_web_driver()
+    logger.debug(f"[{employee.eid}] Driver Initialized")
 
     driver.get(URL)
     sleep(2)
+    logger.debug(f"[{employee.eid}] Login page loaded")
 
     username, password = get_interactive_element(driver, value="//input")
     username.send_keys(employee.eid)
@@ -67,15 +70,19 @@ def execute_sign_operation(
 
     get_interactive_element(driver, value="//button", is_list=False).click()
     sleep(5)
+    logger.debug(f"[{employee.eid}] Logged in")
 
     sign_action_button = get_interactive_element(
         driver, value="//gt-button[1]", is_list=False
+    )
+
+    logger.debug(
+        f"[{employee.eid}] Current SignIn Status: {sign_action_button.text} | Action: {action}"
     )
 
     if not action or SIGN_OPTIONS[action] == sign_action_button.text:
         sign_action_button.click()
         sleep(5)
 
-    print("Exiting...")
+    logger.debug(f"[{employee.eid}] Done! Exiting!")
     driver.quit()
-

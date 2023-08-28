@@ -17,14 +17,12 @@ def _error_response(error: Exception) -> tuple[dict, int]:
     Returns:
         tuple[dict, int]: Flask error response and status code
     """
-    print("HERE")
     try:
         status_code = error.status_code
     except AttributeError:
         status_code = 500
-    print(status_code)
+
     error_message = ("[INTERNAL ERROR] " if status_code == 500 else "") + str(error)
-    print(error_message)
 
     return (
         {

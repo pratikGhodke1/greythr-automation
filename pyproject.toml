@@ -5,6 +5,9 @@ description = "This aplication automates the process of GreytHR sign-in and sign
 authors = ["Pratik Ghodke <pratikghodke41@gmail.com>"]
 readme = "README.md"
 
+[tool.pylint.messages_control]
+disable = "W1203, W0718"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 flask = "^2.3.3"

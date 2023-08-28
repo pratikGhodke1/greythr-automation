@@ -5,8 +5,10 @@ from cryptography.fernet import Fernet
 from api.exceptions import EmployeeAlreadyExists, EmployeeDoesNotExists
 from api.model import db
 from api.model.employee import Employee
+from api.modules.logger import init_logger
 
-fernet = Fernet(b'4VnnKxIio0WQnBkIgL8t0FJolYfwb-zl6_8GrqUaNhA=')
+logger = init_logger(__name__, "SERVICE_HELPER")
+fernet = Fernet(b"4VnnKxIio0WQnBkIgL8t0FJolYfwb-zl6_8GrqUaNhA=")
 
 
 def encrypt(text: str) -> bytes:
@@ -50,6 +52,7 @@ def register_employee(employee_info: dict) -> dict:
     eid = employee_info["eid"]
 
     if Employee.query.filter(Employee.eid == eid).first():
+        logger.error(f"Employee {eid=} Already Exists!")
         raise EmployeeAlreadyExists()
 
     new_user = Employee(**employee_info)
@@ -66,6 +69,7 @@ def delete_employee(eid: str):
     employee = Employee.query.filter(Employee.eid == eid).first()
 
     if not employee:
+        logger.error(f"Employee {eid=} Does Not Exists!")
         raise EmployeeDoesNotExists()
 
     db.session.delete(employee)

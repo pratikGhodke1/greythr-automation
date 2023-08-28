@@ -5,13 +5,17 @@ from random import shuffle
 from time import sleep
 from flask_apscheduler import APScheduler
 from api.model.employee import Employee
+from api.modules.logger import init_logger
 from api.service.greythr_automation import execute_sign_operation
 from api.service.helper import get_sign_action_schedule
+
+logger = init_logger(__name__, "AUTO_SIGN_SCHEDULER")
 
 
 def auto_sign_employees(app, action: str):
     """Auto Sign All Employees"""
-    print(f"Schedular Triggered at {datetime.now()} for action {action.upper()}")
+    logger.info(f"Schedular Triggered at {datetime.now()} for action {action.upper()}")
+
     with app.app_context():
         employees = Employee.query.all()
         shuffle(employees)
@@ -19,12 +23,11 @@ def auto_sign_employees(app, action: str):
 
         for employee, sleep_time in zip(employees, sleep_times):
             sleep(sleep_time * 60)
-            print(f"Signing {employee.name} at {datetime.now()}")
+            logger.info(f"Signing {employee.name} at {datetime.now()}")
             try:
                 execute_sign_operation(employee=employee, action=action)
-            except Exception as err:
-                print(f"Error while signing {employee}")
-                print(f"[ERROR] {str(err)}")
+            except Exception:
+                logger.exception(f"Error while signing {employee}")
 
 
 def setup_schedulers(app, scheduler: APScheduler):
@@ -36,7 +39,8 @@ def setup_schedulers(app, scheduler: APScheduler):
             args=[app, "SignIn"],
             trigger="cron",
             day_of_week="mon-fri",
-            hour=9,
+            hour=13,
+            minute=28,
         )
         scheduler.add_job(
             id="auto_sign_out_employees",
@@ -47,3 +51,4 @@ def setup_schedulers(app, scheduler: APScheduler):
             hour=19,
             minute=30,
         )
+        logger.debug("Schedulers are added")
