@@ -16,9 +16,9 @@ def identify_current_schedule_cycle_start() -> datetime:
 
 def get_optimal_end_duration(total_employees: int):
     """Get a optimal end time to finish all signing activity."""
-    if total_employees < 3:
-        return 3
-    elif total_employees < 10:
+    if total_employees < 5:
+        return 10
+    elif total_employees < 12:
         return 30
     else:
         return 60

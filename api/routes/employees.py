@@ -13,6 +13,7 @@ from api.service.greythr_automation import execute_sign_operation
 
 logger = init_logger(__name__, "EMPLOYEE_SERVICE", request)
 
+
 class EmployeesAPI(Resource):
     """API to handle users related operations."""
 
@@ -27,7 +28,10 @@ class EmployeesAPI(Resource):
         register_employee(body.model_dump())
         logger.info("Employee added!")
         return make_response(
-            {"message": "All Set! ;) Do not disclose existence of this application."},
+            {
+                "message": "All Set! ;) Do not disclose existence of this application.",
+                "note": "If you are on leave, delete your entry from here by hitting api/v1/employee/s123 <-- 'your eid here'",
+            },
             201,
         )
 

@@ -24,8 +24,8 @@ def auto_sign_employees(app, action: str):
         logger.info(
             dumps(
                 [
-                    f"{emp.name}: {datetime.now()+timedelta(minutes=sleep_time)}"
-                    for emp, sleep_time in zip(employees, sleep_times)
+                    f"{emp.name}: {datetime.now()+timedelta(minutes=sum(sleep_times[:n+1]))}"
+                    for n, emp in enumerate(employees)
                 ],
                 indent=4,
             )
