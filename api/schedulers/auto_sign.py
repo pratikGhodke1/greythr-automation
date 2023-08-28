@@ -1,7 +1,7 @@
 """Auto Sign Schedular."""
 
+from json import dumps
 from datetime import datetime, timedelta
-from pprint import pprint
 from random import shuffle
 from time import sleep
 from flask_apscheduler import APScheduler
@@ -21,11 +21,14 @@ def auto_sign_employees(app, action: str):
         employees = Employee.query.all()
         shuffle(employees)
         sleep_times = get_sign_action_schedule(len(employees))
-        pprint(
-            [
-                f"{emp.name}: {datetime.now()+timedelta(minutes=sleep_time)}"
-                for emp, sleep_time in zip(employees, sleep_times)
-            ]
+        logger.info(
+            dumps(
+                [
+                    f"{emp.name}: {datetime.now()+timedelta(minutes=sleep_time)}"
+                    for emp, sleep_time in zip(employees, sleep_times)
+                ],
+                indent=4,
+            )
         )
         for employee, sleep_time in zip(employees, sleep_times):
             retry = 3

@@ -71,6 +71,7 @@ def execute_sign_operation(
     get_interactive_element(driver, value="//button", is_list=False).click()
     sleep(5)
     logger.debug(f"[{employee.eid}] Logged in")
+    driver.set_window_size(1920, 1080)
 
     sign_action_button = get_interactive_element(
         driver, value="//gt-button[1]", is_list=False
