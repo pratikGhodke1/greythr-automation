@@ -26,3 +26,12 @@ class AutoSignFailedError(Exception):
         self.status_code = 422
         self.message = f"Process Failed! {error}"
         super().__init__(self.message)
+
+
+class UnauthorizedError(Exception):
+    """Unauthorized exception"""
+
+    def __init__(self) -> None:
+        self.status_code = 401
+        self.message = "EE na chalbe!!"
+        super().__init__(self.message)

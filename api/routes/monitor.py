@@ -9,7 +9,7 @@ class MonitorAPI(Resource):
 
     def get(self):
         """Check server is running."""
-        return "Working!"
+        return "😈"
 
 
 monitor_blueprint = create_blueprint("monitor", __name__, no_prefix=True)

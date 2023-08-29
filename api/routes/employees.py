@@ -8,6 +8,7 @@ from api.exceptions import AutoSignFailedError
 from api.modules.logger import init_logger
 from api.schema.validation import EmployeesPostRequest
 from api.routes.helper import create_blueprint, create_restful_api
+from api.service.auth import is_allowed
 from api.service.employee import register_employee, delete_employee
 from api.service.greythr_automation import execute_sign_operation
 
@@ -19,7 +20,7 @@ class EmployeesAPI(Resource):
 
     def get(self):
         """Simple test endpoint for development. Will be removed later."""
-        return "Hello World! Send your 'name', 'eid' and 'password' to me. I will handle it all. If you are on leave, delete your entry from here by hitting DELETE api/v1/employee/s123 <-- 'your eid here'"
+        return "Hello World! 👋 Send your 'name', 'eid' and 'password' to me. I will handle it all. If you are on leave, delete your entry from here by hitting DELETE api/v1/employee/s123 👈 'your eid here'. Use 'BASIC AUTH' with your eid and greytHR password as username and password respectively 🤗"
 
     @validate()
     def post(self, body: EmployeesPostRequest):
@@ -29,8 +30,8 @@ class EmployeesAPI(Resource):
         logger.info("Employee added!")
         return make_response(
             {
-                "message": "All Set! ;) Do not disclose existence of this application.",
-                "note": "If you are on leave, delete your entry from here by hitting DELETE api/v1/employee/s123 <-- 'your eid here'",
+                "message": "All Set! 😉 Do not disclose existence of this application.🤐",
+                "note": "If you are on leave, delete your entry from here by hitting DELETE api/v1/employee/s123 👈 'your eid here'. Use 'BASIC AUTH' with your eid and greytHR password as username and password respectively 🤗",
             },
             201,
         )
@@ -39,6 +40,7 @@ class EmployeesAPI(Resource):
 class EmployeeAPI(Resource):
     """API to handle individual employee operations."""
 
+    @is_allowed
     def delete(self, eid: str):
         """Delete an employee entry."""
         logger.info(f"Received request to delete employee {eid=} entry")
@@ -62,7 +64,7 @@ class PunchAPI(Resource):
             raise AutoSignFailedError(str(err)) from err
 
         logger.info(f"Auto Signed for {eid=}!")
-        return "SUCCESS", 201
+        return "😈", 201
 
 
 employees_blueprint = create_blueprint("employee", __name__)

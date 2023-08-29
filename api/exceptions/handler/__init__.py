@@ -5,6 +5,7 @@ from api.exceptions import (
     EmployeeAlreadyExists,
     EmployeeDoesNotExists,
     AutoSignFailedError,
+    UnauthorizedError,
 )
 
 
@@ -38,3 +39,4 @@ def register_error_handlers(app: Flask):
     app.register_error_handler(EmployeeAlreadyExists, _error_response)
     app.register_error_handler(EmployeeDoesNotExists, _error_response)
     app.register_error_handler(AutoSignFailedError, _error_response)
+    app.register_error_handler(UnauthorizedError, _error_response)

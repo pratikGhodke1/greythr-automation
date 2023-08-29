@@ -1,14 +1,16 @@
 """User Service."""
 
+from os import environ
 from cryptography.fernet import Fernet
+from werkzeug.security import generate_password_hash
 
-from api.exceptions import EmployeeAlreadyExists, EmployeeDoesNotExists
+from api.exceptions import EmployeeAlreadyExists
 from api.model import db
 from api.model.employee import Employee
 from api.modules.logger import init_logger
 
-logger = init_logger(__name__, "SERVICE_HELPER")
-fernet = Fernet(b"4VnnKxIio0WQnBkIgL8t0FJolYfwb-zl6_8GrqUaNhA=")
+logger = init_logger(__name__, "EMPLOYEE_SERVICE_HELPER")
+fernet = Fernet(bytes(environ["FERNET_KEY"], encoding="utf-8"))
 
 
 def encrypt(text: str) -> bytes:
@@ -48,6 +50,7 @@ def register_employee(employee_info: dict) -> dict:
         dict: Added employee information
     """
     employee_info["eid"] = employee_info["eid"].lower()
+    employee_info["password_hash"] = generate_password_hash(employee_info["password"])
     employee_info["password"] = encrypt(employee_info["password"])
     eid = employee_info["eid"]
 
@@ -67,10 +70,5 @@ def delete_employee(eid: str):
         eid (str): Employee ID
     """
     employee = Employee.query.filter(Employee.eid == eid).first()
-
-    if not employee:
-        logger.error(f"Employee {eid=} Does Not Exists!")
-        raise EmployeeDoesNotExists()
-
     db.session.delete(employee)
     db.session.commit()
