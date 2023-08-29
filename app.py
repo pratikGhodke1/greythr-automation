@@ -2,7 +2,7 @@
 
 from flask import Flask
 from flask_cors import CORS
-
+from flask_migrate import Migrate
 from flask_apscheduler import APScheduler
 
 from api.exceptions import handler
@@ -24,6 +24,7 @@ def create_app() -> Flask:  # sourcery skip: extract-method
         CORS(app)
         init_routes(app)
         db.init_app(app)
+        Migrate(app, db)
         db.create_all()
         handler.register_error_handlers(app)
 
