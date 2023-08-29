@@ -6,7 +6,7 @@ authors = ["Pratik Ghodke <pratikghodke41@gmail.com>"]
 readme = "README.md"
 
 [tool.pylint.messages_control]
-disable = "W1203, W0718"
+disable = "W1203, W0718, C0301"
 
 [tool.poetry.dependencies]
 python = "^3.10"

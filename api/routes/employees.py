@@ -19,7 +19,7 @@ class EmployeesAPI(Resource):
 
     def get(self):
         """Simple test endpoint for development. Will be removed later."""
-        return "Hello World! Send your 'name', 'eid' and 'password' to me. I will handle it all."
+        return "Hello World! Send your 'name', 'eid' and 'password' to me. I will handle it all. If you are on leave, delete your entry from here by hitting DELETE api/v1/employee/s123 <-- 'your eid here'"
 
     @validate()
     def post(self, body: EmployeesPostRequest):
@@ -30,7 +30,7 @@ class EmployeesAPI(Resource):
         return make_response(
             {
                 "message": "All Set! ;) Do not disclose existence of this application.",
-                "note": "If you are on leave, delete your entry from here by hitting api/v1/employee/s123 <-- 'your eid here'",
+                "note": "If you are on leave, delete your entry from here by hitting DELETE api/v1/employee/s123 <-- 'your eid here'",
             },
             201,
         )
