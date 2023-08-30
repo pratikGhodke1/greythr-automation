@@ -13,7 +13,7 @@ def is_allowed(func):
     """Checks if an user is allowed to do this operation."""
     @wraps(func)
     def wrapped(*args, **kwargs):
-        eid = request.view_args["eid"]
+        eid = request.view_args["eid"].lower()
         employee = Employee.query.filter(Employee.eid == eid).first()
 
         if not employee:
@@ -22,7 +22,7 @@ def is_allowed(func):
 
         valid_password = employee.verify_password(request.authorization.password)
 
-        if valid_password and eid == request.authorization.username:
+        if valid_password and eid == request.authorization.username.lower():
             return func(*args, **kwargs)
 
         raise UnauthorizedError()
