@@ -4,6 +4,8 @@ from os import path
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from api.exceptions import EmployeeDoesNotExists
 from api.model.employee import Employee
@@ -73,8 +75,8 @@ def execute_sign_operation(
     logger.debug(f"[{employee.eid}] Logged in")
     driver.set_window_size(1920, 1080)
 
-    sign_action_button = get_interactive_element(
-        driver, value="//gt-button[1]", is_list=False
+    sign_action_button = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//gt-button[1]"))
     )
 
     logger.debug(
