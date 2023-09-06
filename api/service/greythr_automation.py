@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from api.exceptions import EmployeeDoesNotExists
+from api.exceptions import EmployeeDoesNotExists, RequestDoesNotMatchActionError
 from api.model.employee import Employee
 from api.modules.logger import init_logger
 from api.service.employee import decrypt
@@ -83,9 +83,12 @@ def execute_sign_operation(
         f"[{employee.eid}] Current SignIn Status: '{sign_action_button.text}' | Action: '{action}'"
     )
 
-    if not action or SIGN_OPTIONS[action] == sign_action_button.text:
-        sign_action_button.click()
-        sleep(5)
+    if action and SIGN_OPTIONS[action] != sign_action_button.text:
+        raise RequestDoesNotMatchActionError(
+            f"'{sign_action_button.text}' ==X==> Action: '{action}'"
+        )
 
+    sign_action_button.click()
+    sleep(5)
     logger.debug(f"[{employee.eid}] Done! Exiting!")
     driver.quit()

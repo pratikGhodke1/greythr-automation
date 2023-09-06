@@ -35,3 +35,12 @@ class UnauthorizedError(Exception):
         self.status_code = 401
         self.message = "EE na chalbe!!"
         super().__init__(self.message)
+
+
+class RequestDoesNotMatchActionError(Exception):
+    """Request and web button text do not match."""
+
+    def __init__(self, error: str) -> None:
+        self.status_code = 403
+        self.message = f"Button says different things. {error}"
+        super().__init__(self.message)
