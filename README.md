@@ -60,6 +60,10 @@
     WantedBy=multi-user.target
     ```
 
+3. Change the timezone to IST
+   
+    > sudo timedatectl set-timezone Asia/Kolkata
+
 3.  Reload daemon service
 
     > sudo systemctl daemon-reload
