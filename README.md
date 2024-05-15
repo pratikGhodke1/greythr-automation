@@ -16,13 +16,13 @@
 
     Before going into installing poertry, install few required dependencies
 
-    > sudo apt install python3-distutils python3-dev build-essential
+    > sudo apt install python3-distutils python3-dev build-essential python3-venv libssl-dev libffi-dev
 
     > curl -sSL https://install.python-poetry.org | python3 -
 
-    Update PATH in bashrc
+    Update PATH in bashrc/zshrc
 
-    > PATH = "$PATH:$HOME/.local/bin"
+    > export PATH="$PATH:$HOME/.local/bin"
 
 ## Setup
 
@@ -37,13 +37,19 @@
 3. Install python dependencies
     > poetry install
 
+4. Install google chrome
+    > wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+    > sudo dpkg -i google-chrome-stable_current_amd64.deb
+
+
 # Service Setup
 
 1.  Create service file
 
     > sudo nano /etc/systemd/system/autohr.service
 
-2.  Add service configuration
+2.  Add service configuration. Remember to update User (3 placed)
 
     ```
     [Unit]
@@ -64,15 +70,21 @@
    
     > sudo timedatectl set-timezone Asia/Kolkata
 
-3.  Reload daemon service
+    > export TZ="Asia/Kolkata"
+
+4. Test and check timezone
+   
+    > timedatectl
+
+5.  Reload daemon service
 
     > sudo systemctl daemon-reload
 
-4.  Start AutoHR service
+6.  Start AutoHR service
 
     > sudo systemctl start autohr
 
-5.  Check AutoHR service status
+7.  Check AutoHR service status
     > sudo systemctl status autohr
 
 # Usage

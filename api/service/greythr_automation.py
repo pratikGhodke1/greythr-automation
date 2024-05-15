@@ -11,11 +11,12 @@ from api.exceptions import EmployeeDoesNotExists, RequestDoesNotMatchActionError
 from api.model.employee import Employee
 from api.modules.logger import init_logger
 from api.service.employee import decrypt
+from webdriver_manager.chrome import ChromeDriverManager
 
 logger = init_logger(__name__, "GREYTHR_AUTOMATION_HELPER")
 
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.62"  # pylint: disable=C0301
-URL = "https://sarvaha.greythr.com/home.do"
+URL = "https://sarvaha.greythr.com/uas/portal/auth/login"
 
 SIGN_OPTIONS = {
     "SignIn": "Sign In",
@@ -29,7 +30,7 @@ def init_chrome_web_driver():
     options.add_argument(f"user-agent={USER_AGENT}")
     options.headless = True
     return webdriver.Chrome(
-        executable_path=path.abspath("/usr/bin/chromedriver"), options=options
+        ChromeDriverManager().install(), options=options
     )
 
 
