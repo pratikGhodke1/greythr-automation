@@ -71,10 +71,13 @@
     > sudo timedatectl set-timezone Asia/Kolkata
 
     > export TZ="Asia/Kolkata"
+    > > __Note__: _Some times there will conflict between the /etc/localtime and /etc/timezone files, just add "Asia/Kolkata" in /etc/timezone._
 
 4. Test and check timezone
    
     > timedatectl
+
+5. Add `FERNET_KEY` environment variable
 
 5.  Reload daemon service
 
